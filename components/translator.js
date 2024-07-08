@@ -53,13 +53,22 @@ class Translator {
     let { dictionary, titles } = this.getDictionary(locale)
     
     let translation = text;
+    let dictMatches = {};
     Object.entries(dictionary).forEach(([key, value]) => {
+      if (translation.toLowerCase().includes(key)) {
+        dictMatches[key] = value
+      }
+    })
+
+    Object.entries(dictMatches).forEach(([key, value]) => {
       translation = translation.replace(new RegExp('\\b' + key + '\\b', 'ig'), '<span class="highlight">' + value + '</span>')
     })
 
     Object.entries(titles).forEach(([key, value]) => {
-      translation = translation.replace(new RegExp((key.endsWith('.') ? key.slice(0, key.length - 1) + '[.]' : key), 'ig'), '<span class="highlight">' + (value.charAt(0).toUpperCase() + value.slice(1)) + '</span>')
+      translation = translation.replace(new RegExp('\\b' + (key.endsWith('.') ? key.slice(0, key.length - 1) + '\\.' : '\\b' + key + '\\b'), 'ig'), '<span class="highlight">' + (value.charAt(0).toUpperCase() + value.slice(1)) + '</span>')
     })
+
+
 
     const { timeRegex, timeSplit, timeJoin } = this.getTimeRegex(locale)
     if (translation.match(timeRegex)) {
