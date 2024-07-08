@@ -52,14 +52,14 @@ class Translator {
   translate(text, locale) {
     let { dictionary, titles } = this.getDictionary(locale)
     
-    let translation = text;
     let dictMatches = {};
     Object.entries(dictionary).forEach(([key, value]) => {
-      if (translation.toLowerCase().includes(key)) {
+      if (text.toLowerCase().includes(key)) {
         dictMatches[key] = value
       }
     })
 
+    let translation = text;
     Object.entries(dictMatches).forEach(([key, value]) => {
       translation = translation.replace(new RegExp('\\b' + key + '\\b', 'ig'), '<span class="highlight">' + value + '</span>')
     })
